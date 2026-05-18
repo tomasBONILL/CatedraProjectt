@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core System - Gestor de Hábitos</title>
+    <style>
+        /* Estilos Generales Modernos */
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .tarjeta-principal {
+            background-color: #ffffff;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 440px;
+        }
+        h1, h2 {
+            font-size: 24px;
+            color: #111827;
+            margin: 0 0 6px 0;
+            text-align: center;
+            font-weight: 700;
+        }
+        .subtitulo {
+            font-size: 13px;
+            color: #6b7280;
+            margin: 0 0 25px 0;
+            text-align: center;
+        }
+        
+        /* Estilos de Formularios de Cuentas */
+        .grupo-campo {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+        }
+        input {
+            padding: 11px 14px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            outline: none;
+        }
+        input:focus {
+            border-color: #4f46e5;
+        }
+        button {
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .btn-bloque {
+            width: 100%;
+            background-color: #4f46e5;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .btn-bloque:hover { 
+            background-color: #4338ca; 
+        }
+        .enlace-cambio {
+            font-size: 13px;
+            color: #4f46e5;
+            text-align: center;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        /* Estilos del Gestor de Hábitos */
+        .formulario-habito {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .btn-agregar {
+            background-color: #4f46e5;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .divisor {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 20px 0;
+        }
+        .seccion-titulo {
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .lista-habitos {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .item-habito {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background-color: #f9fafb;
+            border: 1px solid #f3f4f6;
+        }
+        .nombre-pendiente { font-size: 15px; font-weight: 500; color: #1f2937; }
+        .nombre-completado { font-size: 15px; font-weight: 500; color: #9ca3af; text-decoration: line-through; }
+        .badge-racha {
+            font-size: 11px;
+            color: #ea580c;
+            font-weight: 600;
+            background-color: #ffedd5;
+            padding: 2px 6px;
+            border-radius: 8px;
+            width: fit-content;
+            margin-top: 2px;
+        }
+        .btn-completar {
+            background-color: #10b981;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+        .badge-hecho {
+            color: #059669;
+            background-color: #d1fae5;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .mensaje-alerta {
+            color: #ef4444;
+            font-size: 13px;
+            margin-bottom: 12px;
+            text-align: center;
+            display: none;
+        }
+        .saludo-usuario {
+            font-size: 14px;
+            color: #4f46e5;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .btn-cerrar {
+            background-color: #9ca3af;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            float: right;
+            margin-top: -45px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tarjeta-principal">
+        
+        <div id="pantallaRegistro">
+            <h2>Crear Cuenta</h2>
+            <p class="subtitulo">Regístrate para guardar tus hábitos de forma segura.</p>
+            <form id="formRegistro" onsubmit="procesarRegistro(event)">
+                <div class="grupo-campo">
+                    <label for="regNombre">Nombre Completo</label>
+                    <input type="text" id="regNombre" placeholder="Tomas Bonilla" required>
+                </div>
+                <div class="grupo-campo">
+                    <label for="regCorreo">Correo Electrónico</label>
+                    <input type="email" id="regCorreo" placeholder="usuario@correo.com" required>
+                </div>
+                <div class="grupo-campo">
+                    <label for="regPassword">Contraseña</label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                <p class="mensaje-alerta" id="errorRegistro"></p>
+                <button type="submit" class="btn-bloque">Registrarse</button>
+            </form>
+            <div class="enlace-cambio" onclick="cambiarPantalla('pantallaLogin')">¿Ya tienes cuenta? Inicia sesión</div>
+        </div>
+
+        <div id="pantallaLogin" style="display: none;">
+            <h2>Iniciar Sesión</h2>
+            <p class="subtitulo">Ingresa tus credenciales para cargar tus hábitos.</p>
+            <form id="formLogin" onsubmit="procesarLogin(event)">
+                <div class="grupo-campo">
+                    <label for="logCorreo">Correo Electrónico</label>
+                    <input type="email" id="logCorreo" placeholder="usuario@correo.com" required>
+                </div>
+                <div class="grupo-campo">
+                    <label for="logPassword">Contraseña</label>
+                    <input type="password" id="logPassword" placeholder="Tu contraseña" required>
+                </div>
+                <p class="mensaje-alerta" id="errorLogin"></p>
+                <button type="submit" class="btn-bloque">Ingresar</button>
+            </form>
+            <div class="enlace-cambio" onclick="cambiarPantalla('pantallaRegistro')">¿No tienes cuenta? Regístrate</div>
+        </div>
+
+        <div id="pantallaHabitos" style="display: none;">
+            <h1>Mis Hábitos</h1>
+            <button class="btn-cerrar" onclick="cerrarSesion()">Salir</button>
+            <div class="saludo-usuario" id="txtBienvenida"></div>
+
+            <div class="formulario-habito">
+                <input type="text" id="inputHabito" placeholder="Ej. Estudiar programación..." maxlength="40">
+                <button class="btn-agregar" onclick="registrarHabito()">Añadir</button>
+            </div>
+            <p class="mensaje-alerta" id="errorHabito"></p>
+
+            <div class="divisor"></div>
+
+            <h2 class="seccion-titulo" id="contadorTitulo">Mis Hábitos (0 / 10)</h2>
+            <div class="lista-habitos" id="contenedorLista"></div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
